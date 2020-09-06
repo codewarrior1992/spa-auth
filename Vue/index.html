@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h1>CurrentUser is : {{currentUser}}</h1>
+			<form class="signUp" @submit.prevent="signup">
+				<h2>Sign up</h2>
+				<div class="input-group">
+					<input
+						type="email"
+						type="password"
+						placeholder="email"
+						v-model="userUp.email"
+					/>
+					<input
+						type="password"
+						placeholder="password"
+						v-model="userUp.password"
+					/>
+				</div>
+				<button type="submit">Sign Up</button>
+			</form>
+			<br />
+			<form class="signUp" @submit.prevent="signin">
+				<h2>Sign in</h2>
+				<div class="input-group">
+					<input
+						type="email"
+						placeholder="email"
+						v-model="userIn.email"
+					/>
+					<input
+						type="password"
+						placeholder="password"
+						v-model="userIn.password"
+					/>
+				</div>
+				<button type="submit">Sign in</button>
+			</form>
+		</div>
+	</body>
+</html>
+
+<script>
+	new Vue({
+		el: '#app',
+		data() {
+			return {
+				currentUser: '',
+				userUp: {
+					email: '',
+					password: null,
+				},
+				userIn: {
+					email: '',
+					password: null,
+				},
+			};
+		},
+		methods: {
+			signup() {
+				const api = 'http://127.0.0.1:3000/sign-up';
+				let data = this.userUp;
+				axios.post(api, { data }).then((res) => {
+					console.log(res);
+				});
+			},
+			signin() {
+				let data = this.userIn;
+				axios
+					.post('http://127.0.0.1:3000/sign-in', { data })
+					.then((res) => {
+						console.log(res);
+						this.currentUser = res.data.response.user.email;
+					});
+			},
+		},
+		mounted() {},
+	});
+</script>
